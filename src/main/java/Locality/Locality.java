@@ -2,21 +2,21 @@ package Locality;
 
 public class Locality {
     
-	int id;
+	Integer id;
 	String suburb;
 	String postcode;
 	
-	public Locality(int id, String suburb, String postcode) {
+	public Locality(Integer id, String suburb, String postcode) {
 		this.id = id;
 		this.suburb = suburb;
 		this.postcode = postcode;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -1,5 +1,10 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import Locality.Locality;
 import Locality.LocalityService;
 
@@ -15,7 +20,26 @@ public class Main {
 	  public static void main(String[] args) {		  
 		  
         // Start embedded server at this port
-        port(8080);
+        port(8080); // Spark will run on port 8080
+        
+        String url="jdbc:mysql://localhost:3306/au_postcodes_suburbs";
+        String user="root";
+        String password="password";
+        try {
+        	
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection = DriverManager.getConnection(url, user, password);
+			System.out.println("Connection is Successful to the database" + url);
+			
+			String query="Insert into postcodes_geo(suburb,postcode) values('Sindonia', '2999')";
+			Statement statement = connection.createStatement();
+			statement.execute(query);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		}
 
         // Main Page, welcome
         get("/", (request, response) -> "Welcome to the Australian Locality API");
@@ -47,7 +71,7 @@ public class Main {
         get("/locality", (request, response) -> {
             List result = localityService.findAll();
             if (result.isEmpty()) {
-                return om.writeValueAsString("user not found");
+                return om.writeValueAsString("locality not found");
             } else {
                 return om.writeValueAsString(localityService.findAll());
             }
